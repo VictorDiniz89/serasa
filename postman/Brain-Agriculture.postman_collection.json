@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brain Agriculture",
-    "description": "Demo da API. Rode as pastas nesta ordem: Health → Produtores → Fazendas → Plantios → Dashboard → Erros.\n\nbaseUrl = http://localhost:3000. Health em {{baseUrl}}/health; o restante em {{baseUrl}}/api/v1/...",
+    "description": "Demo da API (veja o README). Rode um request por vez: Health → Produtores → Fazendas → Plantios → Dashboard → Erros.\n\nDELETE fica no fim de Fazendas e de Produtores. Não rode no meio da demo. Para apagar: DELETE fazenda, depois DELETE produtor (204 sem body).\n\nbaseUrl = http://localhost:3000. Health em {{baseUrl}}/health; o restante em {{baseUrl}}/api/v1/...",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -81,6 +81,25 @@
             },
             "url": "{{baseUrl}}/api/v1/producers/{{producerId}}"
           }
+        },
+        {
+          "name": "DELETE produtor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "description": "204 só se o produtor não tiver fazenda. Apague as fazendas antes. Não rode no meio da demo — o 409 de Erros precisa do produtor com fazenda.",
+            "url": "{{baseUrl}}/api/v1/producers/{{producerId}}"
+          }
         }
       ]
     },
@@ -127,6 +146,25 @@
               "mode": "raw",
               "raw": "{\n  \"arableAreaHa\": 55\n}"
             },
+            "url": "{{baseUrl}}/api/v1/farms/{{farmId}}"
+          }
+        },
+        {
+          "name": "DELETE fazenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "description": "URL /api/v1/farms/:id — id da fazenda, não do produtor. Remove plantios em cascade. Não rode no meio da demo.",
             "url": "{{baseUrl}}/api/v1/farms/{{farmId}}"
           }
         }
