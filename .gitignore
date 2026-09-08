@@ -1,0 +1,26 @@
+# compiled
+/dist
+*.tsbuildinfo
+
+# dependencies
+/node_modules
+
+# env and secrets
+.env
+.env.*.local
+
+# tests and coverage
+/coverage
+
+# logs
+*.log
+npm-debug.log*
+
+# IDE / OS
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Prisma
+/src/generated/prisma

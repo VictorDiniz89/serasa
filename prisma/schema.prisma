@@ -1,0 +1,64 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum DocumentType {
+    CPF
+    CNPJ
+}
+
+model Producer {
+    id        String   @id @default(uuid())
+    name      String
+    document  String   @unique
+    documentType DocumentType
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    farms      Farm[]
+}
+
+model Farm {
+    id        String   @id @default(uuid())
+    producerId String
+    producer Producer @relation(fields: [producerId], references: [id])
+    name      String
+    city      String
+    state     String   @db.Char(2)
+    totalAreaHa Decimal @db.Decimal(12, 2)
+    arableAreaHa Decimal @db.Decimal(12, 2)
+    vegetationAreaHa Decimal @db.Decimal(12, 2)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    plantings FarmCrop[]
+}
+
+model Harvest {
+    id        String   @id @default(uuid())
+    name      String
+    nameKey   String   @unique
+    plantings FarmCrop[]
+}
+
+model Crop {
+    id        String   @id @default(uuid())
+    name      String
+    nameKey   String   @unique
+    plantings FarmCrop[]
+}
+
+model FarmCrop {
+    id        String   @id @default(uuid())
+    farmId    String
+    harvestId String
+    cropId    String
+    farm      Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+    harvest   Harvest  @relation(fields: [harvestId], references: [id])
+    crop      Crop     @relation(fields: [cropId], references: [id])
+    createdAt DateTime @default(now())
+
+    @@unique([farmId, harvestId, cropId])
+}

@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.gitignore
+coverage
+.env
+*.md
+.vscode
+.idea
+agent-transcripts
+docs
+test
+**/*.spec.ts
+**/*e2e-spec.ts

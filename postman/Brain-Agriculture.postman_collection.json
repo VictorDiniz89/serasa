@@ -1,0 +1,254 @@
+{
+  "info": {
+    "name": "Brain Agriculture",
+    "description": "Demo da API. Rode as pastas nesta ordem: Health → Produtores → Fazendas → Plantios → Dashboard → Erros.\n\nbaseUrl = http://localhost:3000. Health em {{baseUrl}}/health; o restante em {{baseUrl}}/api/v1/...",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "producerId", "value": "" },
+    { "key": "farmId", "value": "" },
+    { "key": "plantingId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produtores",
+      "item": [
+        {
+          "name": "POST criar produtor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('producerId', body.id);",
+                  "pm.test('CPF normalizado', () => {",
+                  "  pm.expect(body.document).to.eql('52998224725');",
+                  "  pm.expect(body.documentType).to.eql('CPF');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João da Silva\",\n  \"document\": \"529.982.247-25\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/producers"
+          }
+        },
+        {
+          "name": "GET listar produtores",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/producers?page=1&limit=20"
+          }
+        },
+        {
+          "name": "GET produtor por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/producers/{{producerId}}"
+          }
+        },
+        {
+          "name": "PATCH atualizar nome",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João da Silva Santos\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/producers/{{producerId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fazendas",
+      "item": [
+        {
+          "name": "POST criar fazenda",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('farmId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fazenda Boa Vista\",\n  \"city\": \"Ribeirão Preto\",\n  \"state\": \"SP\",\n  \"totalAreaHa\": 100,\n  \"arableAreaHa\": 60,\n  \"vegetationAreaHa\": 30\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/producers/{{producerId}}/farms"
+          }
+        },
+        {
+          "name": "GET fazenda por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/farms/{{farmId}}"
+          }
+        },
+        {
+          "name": "PATCH fazenda",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"arableAreaHa\": 55\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/farms/{{farmId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Plantios",
+      "item": [
+        {
+          "name": "POST criar plantio",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('plantingId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"harvestName\": \"Safra 2021\",\n  \"cropName\": \"Soja\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/farms/{{farmId}}/plantings"
+          }
+        },
+        {
+          "name": "GET fazenda com plantios",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/farms/{{farmId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "GET dashboard",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/dashboard"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Erros",
+      "item": [
+        {
+          "name": "POST CPF inválido (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('422', () => pm.response.to.have.status(422));",
+                  "pm.expect(pm.response.json().status).to.eql(422);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Inválido\",\n  \"document\": \"111.111.111-11\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/producers"
+          }
+        },
+        {
+          "name": "POST área estourada (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('422', () => pm.response.to.have.status(422));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fazenda Estourada\",\n  \"city\": \"Ribeirão Preto\",\n  \"state\": \"SP\",\n  \"totalAreaHa\": 10,\n  \"arableAreaHa\": 8,\n  \"vegetationAreaHa\": 3\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/producers/{{producerId}}/farms"
+          }
+        },
+        {
+          "name": "DELETE produtor com fazenda (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/producers/{{producerId}}"
+          }
+        }
+      ]
+    }
+  ]
+}
