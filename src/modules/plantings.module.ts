@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
-import { FARM_REPOSITORY, FarmRepository } from '../application/ports/farm.repository';
+import {
+  FARM_REPOSITORY,
+  FarmRepository,
+} from '../application/ports/farm.repository';
 import {
   PLANTING_REPOSITORY,
   PlantingRepository,

@@ -1,6 +1,9 @@
 import { DomainError } from '../../domain/errors/domain-error';
 import { FarmRepository } from '../ports/farm.repository';
-import { PlantingRecord, PlantingRepository } from '../ports/planting.repository';
+import {
+  PlantingRecord,
+  PlantingRepository,
+} from '../ports/planting.repository';
 
 export class CreatePlantingUseCase {
   constructor(

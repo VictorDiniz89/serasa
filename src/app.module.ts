@@ -7,7 +7,13 @@ import { PlantingsModule } from './modules/plantings.module';
 import { DashboardModule } from './modules/dashboard.module';
 
 @Module({
-  imports: [PrismaModule, ProducersModule, FarmsModule, PlantingsModule, DashboardModule],
+  imports: [
+    PrismaModule,
+    ProducersModule,
+    FarmsModule,
+    PlantingsModule,
+    DashboardModule,
+  ],
   controllers: [HealthController],
   providers: [],
 })

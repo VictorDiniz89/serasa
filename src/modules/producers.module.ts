@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
-import { PRODUCER_REPOSITORY, ProducerRepository } from '../application/ports/producer.repository';
+import {
+  PRODUCER_REPOSITORY,
+  ProducerRepository,
+} from '../application/ports/producer.repository';
 import { CreateProducerUseCase } from '../application/use-cases-producer/create-producer.use-case';
 import { DeleteProducerUseCase } from '../application/use-cases-producer/delete-producer.use-case';
 import { GetProducerUseCase } from '../application/use-cases-producer/get-producer.use-case';

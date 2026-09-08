@@ -25,10 +25,13 @@ export class UpdateFarmUseCase {
     const name = input.name !== undefined ? input.name.trim() : existing.name;
     const city = input.city !== undefined ? input.city.trim() : existing.city;
     const state =
-      input.state !== undefined ? parseBrazilianState(input.state) : existing.state;
+      input.state !== undefined
+        ? parseBrazilianState(input.state)
+        : existing.state;
     const totalAreaHa = input.totalAreaHa ?? existing.totalAreaHa;
     const arableAreaHa = input.arableAreaHa ?? existing.arableAreaHa;
-    const vegetationAreaHa = input.vegetationAreaHa ?? existing.vegetationAreaHa;
+    const vegetationAreaHa =
+      input.vegetationAreaHa ?? existing.vegetationAreaHa;
 
     assertFarmAreas({
       total: totalAreaHa,

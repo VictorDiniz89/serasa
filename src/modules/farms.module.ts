@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
-import { FARM_REPOSITORY, FarmRepository } from '../application/ports/farm.repository';
-import { PRODUCER_REPOSITORY, ProducerRepository } from '../application/ports/producer.repository';
+import {
+  FARM_REPOSITORY,
+  FarmRepository,
+} from '../application/ports/farm.repository';
+import {
+  PRODUCER_REPOSITORY,
+  ProducerRepository,
+} from '../application/ports/producer.repository';
 import { CreateFarmUseCase } from '../application/use-cases-farm/create-farm.use-case';
 import { DeleteFarmUseCase } from '../application/use-cases-farm/delete-farm.use-case';
 import { GetFarmUseCase } from '../application/use-cases-farm/get-farm.use-case';

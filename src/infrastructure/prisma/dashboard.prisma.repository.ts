@@ -10,25 +10,27 @@ export class DashboardPrismaRepository implements DashboardRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getSnapshot(): Promise<DashboardSnapshot> {
-    const [totalFarms, sums, farmsByState, plantingsByCrop] = await Promise.all([
-      this.prisma.farm.count(),
-      this.prisma.farm.aggregate({
-        _sum: {
-          totalAreaHa: true,
-          arableAreaHa: true,
-          vegetationAreaHa: true,
-        },
-      }),
-      this.prisma.farm.groupBy({
-        by: ['state'],
-        _count: { _all: true },
-        orderBy: { state: 'asc' },
-      }),
-      this.prisma.farmCrop.groupBy({
-        by: ['cropId'],
-        _count: { _all: true },
-      }),
-    ]);
+    const [totalFarms, sums, farmsByState, plantingsByCrop] = await Promise.all(
+      [
+        this.prisma.farm.count(),
+        this.prisma.farm.aggregate({
+          _sum: {
+            totalAreaHa: true,
+            arableAreaHa: true,
+            vegetationAreaHa: true,
+          },
+        }),
+        this.prisma.farm.groupBy({
+          by: ['state'],
+          _count: { _all: true },
+          orderBy: { state: 'asc' },
+        }),
+        this.prisma.farmCrop.groupBy({
+          by: ['cropId'],
+          _count: { _all: true },
+        }),
+      ],
+    );
 
     const cropIds = plantingsByCrop.map((row) => row.cropId);
     const crops = cropIds.length

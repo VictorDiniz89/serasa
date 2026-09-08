@@ -1,4 +1,7 @@
-import { ProducerRecord, ProducerRepository } from '../ports/producer.repository';
+import {
+  ProducerRecord,
+  ProducerRepository,
+} from '../ports/producer.repository';
 
 export class ListProducersUseCase {
   constructor(private readonly producers: ProducerRepository) {}

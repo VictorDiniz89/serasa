@@ -26,7 +26,11 @@ export class ProducerPrismaRepository implements ProducerRepository {
 
   async findMany(skip: number, take: number) {
     const [items, total] = await Promise.all([
-      this.prisma.producer.findMany({ skip, take, orderBy: { createdAt: 'desc' } }),
+      this.prisma.producer.findMany({
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+      }),
       this.prisma.producer.count(),
     ]);
     return { items, total };
@@ -57,7 +61,11 @@ export class ProducerPrismaRepository implements ProducerRepository {
 
   async update(
     id: string,
-    data: Partial<{ name: string; document: string; documentType: 'CPF' | 'CNPJ' }>,
+    data: Partial<{
+      name: string;
+      document: string;
+      documentType: 'CPF' | 'CNPJ';
+    }>,
   ): Promise<ProducerRecord> {
     try {
       return await this.prisma.producer.update({ where: { id }, data });
@@ -75,7 +83,10 @@ export class ProducerPrismaRepository implements ProducerRepository {
   }
 
   private rethrowUnique(error: unknown): never {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
       throw DomainError.conflict('Documento já cadastrado');
     }
     throw error;

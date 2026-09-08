@@ -22,7 +22,9 @@ describe('Dashboard (e2e)', () => {
     await app.init();
     prisma = app.get(PrismaService);
 
-    await prisma.farm.deleteMany({ where: { producer: { document: DOCUMENT } } });
+    await prisma.farm.deleteMany({
+      where: { producer: { document: DOCUMENT } },
+    });
     await prisma.producer.deleteMany({ where: { document: DOCUMENT } });
 
     const producer = await request(app.getHttpServer())
@@ -72,7 +74,9 @@ describe('Dashboard (e2e)', () => {
 
   afterEach(async () => {
     if (prisma) {
-      await prisma.farm.deleteMany({ where: { producer: { document: DOCUMENT } } });
+      await prisma.farm.deleteMany({
+        where: { producer: { document: DOCUMENT } },
+      });
       await prisma.producer.deleteMany({ where: { document: DOCUMENT } });
     }
     if (app) {

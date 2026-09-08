@@ -5,8 +5,6 @@ import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 import { configureApp } from '../src/infrastructure/http/configure-app';
 
-
-
 describe('Health (e2e)', () => {
   let app: INestApplication<App>;
 

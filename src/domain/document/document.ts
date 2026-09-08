@@ -50,8 +50,7 @@ function isValidCpf(digits: string): boolean {
   };
 
   return (
-    checkDigit(9) === Number(digits[9]) &&
-    checkDigit(10) === Number(digits[10])
+    checkDigit(9) === Number(digits[9]) && checkDigit(10) === Number(digits[10])
   );
 }
 
@@ -68,12 +67,14 @@ function isValidCnpj(digits: string): boolean {
     return rest < 2 ? 0 : 11 - rest;
   };
 
-  const first = checkDigit(digits.slice(0, 12), [
-    5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2,
-  ]);
-  const second = checkDigit(digits.slice(0, 13), [
-    6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2,
-  ]);
+  const first = checkDigit(
+    digits.slice(0, 12),
+    [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2],
+  );
+  const second = checkDigit(
+    digits.slice(0, 13),
+    [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2],
+  );
 
   return first === Number(digits[12]) && second === Number(digits[13]);
 }

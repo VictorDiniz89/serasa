@@ -12,7 +12,9 @@ export class DeleteProducerUseCase {
 
     const farms = await this.producers.countFarms(id);
     if (farms > 0) {
-      throw DomainError.conflict('Não é possível excluir produtor com fazendas cadastradas');
+      throw DomainError.conflict(
+        'Não é possível excluir produtor com fazendas cadastradas',
+      );
     }
 
     await this.producers.delete(id);

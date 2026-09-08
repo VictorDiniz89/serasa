@@ -1,6 +1,9 @@
 import { Document } from '../../domain/document/document';
 import { DomainError } from '../../domain/errors/domain-error';
-import { ProducerRecord, ProducerRepository } from '../ports/producer.repository';
+import {
+  ProducerRecord,
+  ProducerRepository,
+} from '../ports/producer.repository';
 
 export class UpdateProducerUseCase {
   constructor(private readonly producers: ProducerRepository) {}
@@ -14,7 +17,11 @@ export class UpdateProducerUseCase {
       throw DomainError.notFound('Produtor não encontrado');
     }
 
-    const data: Partial<{ name: string; document: string; documentType: 'CPF' | 'CNPJ' }> = {};
+    const data: Partial<{
+      name: string;
+      document: string;
+      documentType: 'CPF' | 'CNPJ';
+    }> = {};
     if (input.name !== undefined) {
       data.name = input.name.trim();
     }

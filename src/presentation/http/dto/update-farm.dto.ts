@@ -1,5 +1,12 @@
 import { Transform, Type } from 'class-transformer';
-import { IsIn, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { BRAZILIAN_STATES } from '../../../domain/farm/brazilian-state';
 
 export class UpdateFarmDto {
@@ -16,7 +23,7 @@ export class UpdateFarmDto {
   city?: string;
 
   @IsOptional()
-  @Transform(({ value }) =>
+  @Transform(({ value }: { value: unknown }) =>
     typeof value === 'string' ? value.trim().toUpperCase() : value,
   )
   @IsString()
