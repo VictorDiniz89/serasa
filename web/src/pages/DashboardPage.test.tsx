@@ -20,6 +20,33 @@ const snapshot = {
   landUse: { arableHectares: 510, vegetationHectares: 170 },
 };
 
+const emptySnapshot = {
+  totalFarms: 0,
+  totalHectares: 0,
+  farmsByState: [],
+  cropsPlanted: [],
+  landUse: { arableHectares: 0, vegetationHectares: 0 },
+};
+
+test('mostra Nenhuma fazenda ainda quando totalFarms é zero', async () => {
+  server.use(
+    http.get('/api/v1/dashboard', () => HttpResponse.json(emptySnapshot)),
+  );
+  renderWithProviders(<DashboardPage />);
+  expect(await screen.findByText('Nenhuma fazenda ainda')).toBeInTheDocument();
+});
+
+test('mostra erro de API em falha de rede e não mostra estado vazio', async () => {
+  server.use(
+    http.get('/api/v1/dashboard', () => HttpResponse.error()),
+  );
+  renderWithProviders(<DashboardPage />);
+  expect(
+    await screen.findByText('Não foi possível falar com a API'),
+  ).toBeInTheDocument();
+  expect(screen.queryByText('Nenhuma fazenda ainda')).not.toBeInTheDocument();
+});
+
 test('mostra totais e títulos das três pizzas', async () => {
   server.use(
     http.get('/api/v1/dashboard', () => HttpResponse.json(snapshot)),

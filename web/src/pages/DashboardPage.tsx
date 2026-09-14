@@ -29,7 +29,7 @@ const Status = styled.p`
 `;
 
 export function DashboardPage() {
-  const { data, isLoading } = useGetDashboardQuery();
+  const { data, isLoading, isError } = useGetDashboardQuery();
 
   if (isLoading) {
     return (
@@ -39,7 +39,15 @@ export function DashboardPage() {
     );
   }
 
-  if (!data || data.totalFarms === 0) {
+  if (isError || !data) {
+    return (
+      <Page>
+        <Status>Não foi possível falar com a API</Status>
+      </Page>
+    );
+  }
+
+  if (data.totalFarms === 0) {
     return (
       <Page>
         <Status>Nenhuma fazenda ainda</Status>
