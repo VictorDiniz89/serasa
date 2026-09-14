@@ -5,6 +5,7 @@ import { RequestLogInterceptor } from './request-log.interceptor';
 
 export function configureApp(app: INestApplication): void {
   app.setGlobalPrefix('api/v1', { exclude: ['health'] });
+  app.enableCors({ origin: 'http://localhost:5173' });
   app.use(requestIdMiddleware);
   app.useGlobalPipes(
     new ValidationPipe({

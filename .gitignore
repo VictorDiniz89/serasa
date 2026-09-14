@@ -3,7 +3,8 @@
 *.tsbuildinfo
 
 # dependencies
-/node_modules
+node_modules
+/web/dist
 
 # env and secrets
 .env
