@@ -4,7 +4,7 @@ API REST para produtores rurais, fazendas, plantios (safra + cultura) e dashboar
 
 Desafio: [brain-ag/trabalhe-conosco](https://github.com/brain-ag/trabalhe-conosco).
 
-Não tem frontend nem Swagger UI. A demo é Postman + o contrato em `openapi.yaml`.
+Há um frontend SPA em `web/`. Não tem Swagger UI. A demo de API continua Postman + o contrato em `openapi.yaml`.
 
 ## Subir em 2 minutos
 
@@ -29,6 +29,25 @@ Para zerar o banco e voltar só o seed:
 docker compose down -v
 docker compose up --build
 ```
+
+## Frontend (SPA)
+
+Com a API no ar (`docker compose up --build`):
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Abra [http://localhost:5173](http://localhost:5173). O Vite encaminha `/api` para `:3000`.
+
+```bash
+cd web
+npm test          # Jest + MSW, sem Postgres
+```
+
+Postman continua falando com `http://localhost:3000`.
 
 ## O que o seed cria
 
