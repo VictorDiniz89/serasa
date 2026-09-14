@@ -11,7 +11,7 @@ export function renderWithProviders(
   options?: Omit<RenderOptions, 'wrapper'> & { route?: string },
 ) {
   const store = createAppStore();
-  const route = options?.route ?? '/';
+  const { route = '/', ...renderOptions } = options ?? {};
 
   function Wrapper({ children }: PropsWithChildren) {
     return (
@@ -23,5 +23,5 @@ export function renderWithProviders(
     );
   }
 
-  return render(ui, { wrapper: Wrapper, ...options });
+  return render(ui, { wrapper: Wrapper, ...renderOptions });
 }
