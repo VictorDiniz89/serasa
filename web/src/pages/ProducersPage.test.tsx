@@ -5,6 +5,15 @@ import { renderWithProviders } from '../test/render';
 import { server } from '../test/server';
 import { ProducersPage } from './ProducersPage';
 
+test('mostra erro de API quando GET /api/v1/producers falha na rede', async () => {
+  server.use(http.get('/api/v1/producers', () => HttpResponse.error()));
+  renderWithProviders(<ProducersPage />, { route: '/producers' });
+  expect(
+    await screen.findByText('Não foi possível falar com a API'),
+  ).toBeInTheDocument();
+  expect(screen.queryByRole('columnheader', { name: /nome/i })).not.toBeInTheDocument();
+});
+
 test('lista produtores do GET mockado', async () => {
   server.use(
     http.get('/api/v1/producers', () =>

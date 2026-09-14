@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ProducerForm } from '../components/organisms/ProducerForm';
+import { problemDetail } from '../lib/problem';
 import { useGetProducersQuery } from '../store/api';
 
 const Page = styled.main`
@@ -33,38 +34,52 @@ const ProducerLink = styled(Link)`
   color: ${({ theme }) => theme.color.accent};
 `;
 
+const Status = styled.p`
+  color: ${({ theme }) => theme.color.muted};
+  margin: 0;
+`;
+
 export function ProducersPage() {
   const [page] = useState(1);
   const limit = 20;
-  const { data } = useGetProducersQuery({ page, limit });
+  const { data, isLoading, isError, error } = useGetProducersQuery({
+    page,
+    limit,
+  });
   const producers = data?.data ?? [];
 
   return (
     <Page>
       <Heading>Produtores</Heading>
       <ProducerForm />
-      <Table>
-        <thead>
-          <tr>
-            <Th>Nome</Th>
-            <Th>Documento</Th>
-            <Th>Tipo</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {producers.map((producer) => (
-            <tr key={producer.id}>
-              <Td>
-                <ProducerLink to={`/producers/${producer.id}`}>
-                  {producer.name}
-                </ProducerLink>
-              </Td>
-              <Td>{producer.document}</Td>
-              <Td>{producer.documentType}</Td>
+      {isLoading ? (
+        <Status>Carregando…</Status>
+      ) : isError || !data ? (
+        <Status>{problemDetail(error)}</Status>
+      ) : (
+        <Table>
+          <thead>
+            <tr>
+              <Th>Nome</Th>
+              <Th>Documento</Th>
+              <Th>Tipo</Th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {producers.map((producer) => (
+              <tr key={producer.id}>
+                <Td>
+                  <ProducerLink to={`/producers/${producer.id}`}>
+                    {producer.name}
+                  </ProducerLink>
+                </Td>
+                <Td>{producer.document}</Td>
+                <Td>{producer.documentType}</Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </Page>
   );
 }
