@@ -14,7 +14,7 @@ Critério de pronto: outro pleno sobe com Docker, roda os testes, importa o Post
 
 ## Fora de escopo
 
-- Frontend React, gráficos renderizados, microfrontend
+- Frontend React, gráficos renderizados, microfrontend — **depois atualizado**: ver `2026-09-14-brain-agriculture-frontend-design.md` (SPA em `web/`)
 - Autenticação, JWT, RBAC
 - Microsserviços, SQS/SNS, Kafka, Kubernetes, Terraform
 - MongoDB
