@@ -69,8 +69,9 @@ export function FarmDetailPage() {
   const { data, isLoading, isError, error } = useGetFarmQuery(id, {
     skip: !id,
   });
-  const [deleteFarm] = useDeleteFarmMutation();
-  const [deletePlanting] = useDeletePlantingMutation();
+  const [deleteFarm, { isLoading: isDeletingFarm }] = useDeleteFarmMutation();
+  const [deletePlanting, { isLoading: isDeletingPlanting }] =
+    useDeletePlantingMutation();
   const [errorMessage, setErrorMessage] = useState('');
 
   async function handleDeleteFarm() {
@@ -129,7 +130,7 @@ export function FarmDetailPage() {
       </Meta>
       {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
       <Actions>
-        <Button type="button" onClick={handleDeleteFarm}>
+        <Button type="button" onClick={handleDeleteFarm} disabled={isDeletingFarm}>
           Excluir fazenda
         </Button>
       </Actions>
@@ -151,6 +152,7 @@ export function FarmDetailPage() {
                 <Button
                   type="button"
                   onClick={() => handleDeletePlanting(planting.id)}
+                  disabled={isDeletingPlanting}
                 >
                   Excluir plantio
                 </Button>

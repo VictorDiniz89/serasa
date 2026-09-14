@@ -26,6 +26,11 @@ const Status = styled.p`
   margin: 0;
 `;
 
+const Meta = styled.p`
+  color: ${({ theme }) => theme.color.muted};
+  margin: 0 0 ${({ theme }) => theme.space.md};
+`;
+
 const NameForm = styled.form`
   margin-bottom: ${({ theme }) => theme.space.md};
   max-width: 28rem;
@@ -75,19 +80,22 @@ export function ProducerDetailPage() {
   const { data, isLoading, isError, error } = useGetProducerQuery(id, {
     skip: !id,
   });
-  const [deleteProducer] = useDeleteProducerMutation();
-  const [updateProducer] = useUpdateProducerMutation();
+  const [deleteProducer, { isLoading: isDeleting }] = useDeleteProducerMutation();
+  const [updateProducer, { isLoading: isUpdating }] = useUpdateProducerMutation();
   const [errorMessage, setErrorMessage] = useState('');
 
-  async function handleSaveName(event: FormEvent<HTMLFormElement>) {
+  function handleSaveName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const field = (event.target as HTMLFormElement).elements.namedItem('name');
+    const nextName = field instanceof HTMLInputElement ? field.value : '';
     setErrorMessage('');
-    const nextName = String(new FormData(event.currentTarget).get('name') ?? '');
-    try {
-      await updateProducer({ id, name: nextName }).unwrap();
-    } catch (err) {
-      setErrorMessage(problemDetail(err));
-    }
+    void (async () => {
+      try {
+        await updateProducer({ id, name: nextName }).unwrap();
+      } catch (err) {
+        setErrorMessage(problemDetail(err));
+      }
+    })();
   }
 
   async function handleDelete() {
@@ -128,15 +136,20 @@ export function ProducerDetailPage() {
   return (
     <Page>
       <Heading>{data.name}</Heading>
+      <Meta>
+        {data.documentType} {data.document}
+      </Meta>
       {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
       <NameForm onSubmit={handleSaveName}>
         <FormField label="Nome" htmlFor="producer-name">
           <Input id="producer-name" name="name" defaultValue={data.name} />
         </FormField>
-        <Button type="submit">Salvar nome</Button>
+        <Button type="submit" disabled={isUpdating}>
+          Salvar nome
+        </Button>
       </NameForm>
       <Actions>
-        <Button type="button" onClick={handleDelete}>
+        <Button type="button" onClick={handleDelete} disabled={isDeleting}>
           Excluir produtor
         </Button>
       </Actions>
@@ -145,6 +158,8 @@ export function ProducerDetailPage() {
         <thead>
           <tr>
             <Th>Fazendas</Th>
+            <Th>Cidade</Th>
+            <Th>Área</Th>
           </tr>
         </thead>
         <tbody>
@@ -153,6 +168,10 @@ export function ProducerDetailPage() {
               <Td>
                 <FarmLink to={`/farms/${farm.id}`}>{farm.name}</FarmLink>
               </Td>
+              <Td>
+                {farm.city}/{farm.state}
+              </Td>
+              <Td>{farm.totalAreaHa} ha</Td>
             </tr>
           ))}
         </tbody>

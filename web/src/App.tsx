@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import { Link, Route, Routes } from 'react-router-dom';
+import styled, { createGlobalStyle } from 'styled-components';
 import { Header } from './components/organisms/Header';
 import { DashboardPage } from './pages/DashboardPage';
 import { FarmDetailPage } from './pages/FarmDetailPage';
@@ -14,6 +14,28 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Page = styled.main`
+  padding: ${({ theme }) => theme.space.lg};
+`;
+
+const Status = styled.p`
+  color: ${({ theme }) => theme.color.muted};
+  margin: 0;
+`;
+
+const BackLink = styled(Link)`
+  color: ${({ theme }) => theme.color.accent};
+`;
+
+function NotFound() {
+  return (
+    <Page>
+      <Status>Não encontrado</Status>
+      <BackLink to="/producers">Produtores</BackLink>
+    </Page>
+  );
+}
+
 export function App() {
   return (
     <>
@@ -24,6 +46,7 @@ export function App() {
         <Route path="/producers" element={<ProducersPage />} />
         <Route path="/producers/:id" element={<ProducerDetailPage />} />
         <Route path="/farms/:id" element={<FarmDetailPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

@@ -11,6 +11,10 @@ const Form = styled.form`
   max-width: 28rem;
 `;
 
+const Heading = styled.h2`
+  margin: 0 0 ${({ theme }) => theme.space.md};
+`;
+
 type PlantingFormProps = {
   farmId: string;
   onError: (message: string) => void;
@@ -35,6 +39,7 @@ export function PlantingForm({ farmId, onError }: PlantingFormProps) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      <Heading>Novo plantio</Heading>
       <FormField label="Safra" htmlFor="planting-harvest">
         <Input
           id="planting-harvest"

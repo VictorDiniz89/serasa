@@ -13,6 +13,10 @@ const Form = styled.form`
   max-width: 28rem;
 `;
 
+const Heading = styled.h2`
+  margin: 0 0 ${({ theme }) => theme.space.md};
+`;
+
 type FarmFormProps = {
   producerId: string;
   onError: (message: string) => void;
@@ -53,7 +57,8 @@ export function FarmForm({ producerId, onError }: FarmFormProps) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormField label="Nome" htmlFor="farm-name">
+      <Heading>Nova fazenda</Heading>
+      <FormField label="Nome da fazenda" htmlFor="farm-name">
         <Input
           id="farm-name"
           name="name"
