@@ -1,34 +1,49 @@
-# Brain Agriculture API
+# Brain Agriculture
 
-API REST para produtores rurais, fazendas, plantios (safra + cultura) e dashboard agregado. Teste técnico de backend (Node.js, TypeScript, NestJS, PostgreSQL).
+Teste **fullstack** Serasa Experian ([brain-ag/trabalhe-conosco](https://github.com/brain-ag/trabalhe-conosco)): produtores rurais, fazendas, plantios e dashboard com três pizzas. Um repo; API e SPA se falam por HTTP `/api/v1`.
 
-Desafio: [brain-ag/trabalhe-conosco](https://github.com/brain-ag/trabalhe-conosco).
+| Peça | Pasta | URL |
+|---|---|---|
+| API (NestJS + Postgres) | raiz | http://localhost:3000 |
+| SPA (Vite + React) | `web/` | http://localhost:5173 |
 
-Não tem frontend nem Swagger UI. A demo é Postman + o contrato em `openapi.yaml`.
+## Como rodar
 
-## Subir em 2 minutos
+Precisa de **Docker Desktop**. Node 22 só para o SPA (e se for desenvolver a API fora do container).
 
-Precisa só de **Docker Desktop** (Compose). Node 22 entra se for desenvolver fora do container.
+**1. API** — um terminal:
 
 ```bash
 docker compose up --build
 ```
 
-Espere o log `Nest application successfully started`. A API fica em [http://localhost:3000](http://localhost:3000).
+Espere `Nest application successfully started`.
 
-Confira:
+- http://localhost:3000/health → `{ "status": "ok" }`
+- http://localhost:3000/api/v1/dashboard → 3 fazendas, 770 ha
 
-- [http://localhost:3000/health](http://localhost:3000/health) → `{ "status": "ok" }`
-- [http://localhost:3000/api/v1/dashboard](http://localhost:3000/api/v1/dashboard) → totais e séries (3 fazendas, 770 ha)
-
-`GET /` não existe: responde **404** em `application/problem+json`. As rotas de negócio usam o prefixo `/api/v1`.
-
-Para zerar o banco e voltar só o seed:
+**2. SPA** — outro terminal, com a API no ar:
 
 ```bash
-docker compose down -v
-docker compose up --build
+cd web
+npm install
+npm run dev
 ```
+
+Abra **http://localhost:5173**. O Vite encaminha `/api` para `:3000`.
+
+**3. Testes**
+
+```bash
+npm test              # API (domínio)
+cd web && npm test    # SPA (Jest + MSW, sem Postgres)
+```
+
+Postman fala com `http://localhost:3000` (`postman/Brain-Agriculture.postman_collection.json`). Não tem Swagger UI; o contrato é `openapi.yaml`.
+
+Zerar o banco e voltar o seed: `docker compose down -v` e de novo o passo 1. `GET /` na API é 404 de propósito (rotas em `/api/v1`).
+
+Decisões de desenho (arquivos separados): [API](docs/superpowers/specs/2026-09-08-brain-agriculture-backend-design.md) · [SPA](docs/superpowers/specs/2026-09-14-brain-agriculture-frontend-design.md)
 
 ## O que o seed cria
 
@@ -85,15 +100,17 @@ npm run start:dev
 ## Testes
 
 ```bash
-npm test              # unitários (domínio)
-npm run test:e2e      # HTTP + Postgres
+npm test              # API: unitários (domínio)
+npm run test:e2e      # API: HTTP + Postgres
 npm run typecheck
 npm run lint:check
+
+cd web && npm test    # SPA: Jest + MSW, sem Postgres
 ```
 
 O e2e precisa do Postgres no ar e de `DATABASE_URL` no `.env`. Banco sujo (mesmo CPF de um teste anterior) pode dar 409 no e2e local; o CI sobe Postgres vazio.
 
-CI: lint, typecheck, unit, e2e e build da imagem a cada push.
+CI a cada push: job **test** (lint, typecheck, unit, e2e da API), job **docker** (build da imagem) e job **web** (lint, `tsc` e Jest em `web/`).
 
 ## Rotas
 
@@ -133,7 +150,17 @@ Erros em RFC 7807 (`type`, `title`, `status`, `detail`, `requestId`). Header `x-
 
 ## Arquitetura
 
-Clean Architecture leve — domínio e use cases não importam Nest nem Prisma.
+O SPA é só UI. CPF, hectares e 409 continuam no domínio da Nest.
+
+```text
+Browser (Vite :5173)
+  → RTK Query /api/v1
+       → proxy Vite e/ou CORS
+            → Nest :3000
+                 → PostgreSQL
+```
+
+Na API, Clean Architecture leve — domínio e use cases não importam Nest nem Prisma.
 
 ```text
 HTTP → Presentation (controllers, DTOs, filtros)
@@ -147,6 +174,7 @@ HTTP → Presentation (controllers, DTOs, filtros)
 - **Controller** só fala HTTP. Invariantes ficam no domínio.
 - **Ports** isolam persistência. O módulo Nest só faz o wiring.
 - Sem Swagger UI: a apresentação é no Postman; o contrato versionado é `openapi.yaml`.
+- Por que 409 no delete, por que pizza de solo sem sobra, por que Vite e não Next: specs linkadas no topo.
 
 ## Logs
 

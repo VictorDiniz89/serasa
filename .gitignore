@@ -3,7 +3,8 @@
 *.tsbuildinfo
 
 # dependencies
-/node_modules
+node_modules
+/web/dist
 
 # env and secrets
 .env
@@ -21,6 +22,9 @@ npm-debug.log*
 .vscode
 .DS_Store
 Thumbs.db
+
+# local agent scratch (not part of the delivery)
+.superpowers/
 
 # Prisma
 /src/generated/prisma
