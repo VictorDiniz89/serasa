@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.test.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["./**/*.ts", "./**/*.tsx"],
+  "exclude": []
+}

@@ -23,5 +23,8 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
+# local agent scratch (not part of the delivery)
+.superpowers/
+
 # Prisma
 /src/generated/prisma

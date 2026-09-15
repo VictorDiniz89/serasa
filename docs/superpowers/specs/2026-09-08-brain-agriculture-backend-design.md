@@ -1,28 +1,16 @@
 # Brain Agriculture — API backend (teste Serasa Experian)
 
 Data: 2026-09-08  
-Status: aprovada — você implementa ponto a ponto; código só no chat  
+Status: entregue — código na raiz (`src/`, `prisma/`)  
+Como rodar o sistema: [`README.md`](../../../README.md)  
+SPA (arquivo à parte): [`2026-09-14-brain-agriculture-frontend-design.md`](2026-09-14-brain-agriculture-frontend-design.md)  
 Fonte do desafio: [brain-ag/trabalhe-conosco](https://github.com/brain-ag/trabalhe-conosco)
 
-API REST para cadastro de produtores rurais, fazendas, culturas por safra e dashboard agregado. Entrega alinhada à vaga de desenvolvedor pleno backend (Node.js, TypeScript, NestJS, Postgres, testes, Docker, observabilidade).
+API REST para cadastro de produtores rurais, fazendas, culturas por safra e dashboard agregado. Entrega alinhada à vaga de desenvolvedor pleno backend (Node.js, TypeScript, NestJS, Postgres, testes, Docker, observabilidade). O front não está neste arquivo.
 
 ## Objetivo
 
-Mostrar interpretação de domínio, camadas, código testável e contrato de API. Não mostrar microsserviço, fila nem front.
-
-Critério de pronto: outro pleno sobe com Docker, roda os testes, importa o Postman e percorre o fluxo da apresentação sem perguntar no WhatsApp.
-
-## Fora de escopo
-
-- Frontend React, gráficos renderizados, microfrontend — **depois atualizado**: ver `2026-09-14-brain-agriculture-frontend-design.md` (SPA em `web/`)
-- Autenticação, JWT, RBAC
-- Microsserviços, SQS/SNS, Kafka, Kubernetes, Terraform
-- MongoDB
-- Swagger UI (`/docs`)
-- Deploy AWS (fase posterior, só se o núcleo estiver pronto e houver tempo)
-- Transferência de fazenda entre produtores
-- Cadastro aninhado produtor+fazendas num único POST
-- Soft delete
+Mostrar interpretação de domínio, camadas, código testável e contrato de API. Não mostrar microsserviço nem fila. O SPA está na spec de frontend e na pasta `web/`.
 
 ## Stack
 
@@ -194,7 +182,7 @@ CI não passa se lint, typecheck ou testes falharem. Fixtures mockadas só no un
 - `docker-compose.yml`: API, Postgres, migrate no start, seed
 - README em português: pré-requisitos, `docker compose up`, como rodar testes, como importar o Postman, decisões de arquitetura (por que Clean Architecture leve, por que 409, por que sem Swagger UI), diagrama das camadas
 
-## Qualidade de pleno (sem teatro)
+## Qualidade
 
 Incluir: camadas nítidas, invariantes no domínio, testes que quebram regra de negócio, problem+json, logs, Docker, CI, README honesto.
 
@@ -205,8 +193,3 @@ Não incluir: event bus interno “para o futuro”, DDD com dezenas de aggregat
 1. Núcleo: domínio, Prisma, CRUD, dashboard, testes, Docker, Postman, OpenAPI, CI, README
 2. Opcional: deploy AWS (App Runner ou equivalente) se a fase 1 estiver fechada e houver tempo
 
-## Riscos
-
-- Tratar cultura/safra como string livre sem normalizar → pizza quebrada. Mitigação: catálogo get-or-create case-insensitive
-- Swagger UI no lugar da spec → foge do combinado da apresentação. Mitigação: arquivo OpenAPI + Postman
-- Overengineering de filas/microsserviço → dilui a nota de pleno neste CRUD

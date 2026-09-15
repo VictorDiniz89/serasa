@@ -1,9 +1,11 @@
 # Brain Agriculture — SPA frontend (teste Serasa Experian, track fullstack)
 
 Data: 2026-09-14  
-Status: aguardando revisão — código só depois do plano  
-Fonte do desafio: [brain-ag/trabalhe-conosco](https://github.com/brain-ag/trabalhe-conosco)  
-Complementa: `docs/superpowers/specs/2026-09-08-brain-agriculture-backend-design.md` (API já entregue)
+Status: entregue — código em `web/`  
+Como rodar o sistema: [`README.md`](../../../README.md)  
+API (arquivo à parte): [`2026-09-08-brain-agriculture-backend-design.md`](2026-09-08-brain-agriculture-backend-design.md)  
+Fonte do desafio: [brain-ag/trabalhe-conosco](https://github.com/brain-ag/trabalhe-conosco)
+
 
 SPA React que consome a API Nest existente. O desafio de front virou obrigatório: a vaga passou a fullstack. Gráficos de pizza saem do JSON do `GET /api/v1/dashboard`.
 

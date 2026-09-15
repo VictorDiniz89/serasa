@@ -1,5 +1,5 @@
-import { PropsWithChildren, ReactElement } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import { type PropsWithChildren, type ReactElement } from 'react';
+import { render, type RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
